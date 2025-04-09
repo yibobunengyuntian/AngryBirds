@@ -1,0 +1,43 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resource/UI/icon/Buttons/ArrowLeft-Bold/Default.png</file>
+        <file>Resource/UI/icon/Buttons/ArrowLeft-Bold/Hover.png</file>
+        <file>Resource/UI/icon/Buttons/ArrowLeft-Thin/Default.png</file>
+        <file>Resource/UI/icon/Buttons/ArrowLeft-Thin/Hover.png</file>
+        <file>Resource/UI/icon/Buttons/ArrowRight-Bold/Default.png</file>
+        <file>Resource/UI/icon/Buttons/ArrowRight-Bold/Hover.png</file>
+        <file>Resource/UI/icon/Buttons/ArrowRight-Thin/Default.png</file>
+        <file>Resource/UI/icon/Buttons/ArrowRight-Thin/Hover.png</file>
+        <file>Resource/UI/icon/Buttons/Home/Default.png</file>
+        <file>Resource/UI/icon/Buttons/Home/Hover.png</file>
+        <file>Resource/UI/icon/Buttons/Levels/Default.png</file>
+        <file>Resource/UI/icon/Buttons/Levels/Hover.png</file>
+        <file>Resource/UI/icon/Buttons/Pause/Default.png</file>
+        <file>Resource/UI/icon/Buttons/Pause/Hover.png</file>
+        <file>Resource/UI/icon/Buttons/Play/Default.png</file>
+        <file>Resource/UI/icon/Buttons/Play/Hover.png</file>
+        <file>Resource/UI/icon/Buttons/Repeat/Default.png</file>
+        <file>Resource/UI/icon/Buttons/Repeat/Hover.png</file>
+        <file>Resource/UI/icon/Buttons/SoundOff/Default.png</file>
+        <file>Resource/UI/icon/Buttons/SoundOff/Hover.png</file>
+        <file>Resource/UI/icon/Buttons/SoundOn/Default.png</file>
+        <file>Resource/UI/icon/Buttons/SoundOn/Hover.png</file>
+        <file>Resource/UI/icon/Buttons/Star/Default.png</file>
+        <file>Resource/UI/icon/Buttons/Star/Hover.png</file>
+        <file>Resource/UI/UI.qss</file>
+        <file>Resource/UI/icon/background/bg_stop.png</file>
+        <file>Resource/UI/icon/background/bg_home.jpg</file>
+        <file>Resource/UI/icon/Buttons/Rect/Default.png</file>
+        <file>Resource/UI/icon/Buttons/Rect/Hover.png</file>
+        <file>Resource/UI/icon/title.ico</file>
+        <file>Resource/Game/icon/bird_red.png</file>
+        <file>Resource/Game/icon/bird_yellow.png</file>
+        <file>Resource/Game/icon/bord.jpg</file>
+        <file>Resource/Game/icon/obstacles_1.png</file>
+        <file>Resource/Game/icon/obstacles_2.png</file>
+        <file>Resource/Game/icon/obstacles_3.png</file>
+        <file>Resource/Game/icon/pig.png</file>
+        <file>Resource/Game/icon/wood.png</file>
+        <file>Resource/Game/json/level.json</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,169 @@
+/* QToolTip通用样式 */
+QToolTip {
+    background-color: #ffffe1;        /* 背景色 */
+    color: #f9c23c;                   /* 文字颜色 */
+    font-size: 24px;                  /* 字体大小 */
+    border: 0px solid #555;           /* 边框 */
+    border-radius: 8px;               /* 圆角 */
+    padding: 5px;                     /* 内边距 */
+    opacity: 230;                     /* 透明度 (0-255) */
+}
+
+/* 按钮通用样式 */
+QPushButton[Qss_Type^="Button"] {
+    min-width: 40px;
+    max-width: 40px;
+    min-height: 42px;
+    max-height: 42px;
+    border: none;
+    border-radius: 0px;
+}
+
+QPushButton[Qss_Type="Button ArrowLeft-Bold"] {
+    background-image: url(:/Resource/UI/icon/Buttons/ArrowLeft-Bold/Default.png);
+}
+QPushButton[Qss_Type="Button ArrowLeft-Bold"]:hover {
+    background-image: url(:/Resource/UI/icon/Buttons/ArrowLeft-Bold/Hover.png);
+}
+QPushButton[Qss_Type="Button ArrowLeft-Bold"]:pressed {
+    background-image: url(:/Resource/UI/icon/Buttons/ArrowLeft-Bold/Hover.png);
+}
+
+QPushButton[Qss_Type="Button ArrowRight-Bold"] {
+    background-image: url(:/Resource/UI/icon/Buttons/ArrowRight-Bold/Default.png);
+}
+QPushButton[Qss_Type="Button ArrowRight-Bold"]:hover {
+    background-image: url(:/Resource/UI/icon/Buttons/ArrowRight-Bold/Hover.png);
+}
+QPushButton[Qss_Type="Button ArrowRight-Bold"]:pressed {
+    background-image: url(:/Resource/UI/icon/Buttons/ArrowRight-Bold/Hover.png);
+}
+
+QPushButton[Qss_Type="Button ArrowLeft-Thin"] {
+    background-image: url(:/Resource/UI/icon/Buttons/ArrowLeft-Thin/Default.png);
+}
+QPushButton[Qss_Type="Button ArrowLeft-Thin"]:hover {
+    background-image: url(:/Resource/UI/icon/Buttons/ArrowLeft-Thin/Hover.png);
+}
+QPushButton[Qss_Type="Button ArrowLeft-Thin"]:pressed {
+    background-image: url(:/Resource/UI/icon/Buttons/ArrowLeft-Thin/Hover.png);
+}
+
+QPushButton[Qss_Type="Button ArrowRight-Thin"] {
+    background-image: url(:/Resource/UI/icon/Buttons/ArrowRight-Thin/Default.png);
+}
+QPushButton[Qss_Type="Button ArrowRight-Thin"]:hover {
+    background-image: url(:/Resource/UI/icon/Buttons/ArrowRight-Thin/Hover.png);
+}
+QPushButton[Qss_Type="Button ArrowRight-Thin"]:pressed {
+    background-image: url(:/Resource/UI/icon/Buttons/ArrowRight-Thin/Hover.png);
+}
+
+
+QPushButton[Qss_Type="Button Home"] {
+    background-image: url(:/Resource/UI/icon/Buttons/Home/Default.png);
+}
+QPushButton[Qss_Type="Button Home"]:hover {
+    background-image: url(:/Resource/UI/icon/Buttons/Home/Hover.png);
+}
+QPushButton[Qss_Type="Button Home"]:pressed {
+    background-image: url(:/Resource/UI/icon/Buttons/Home/Hover.png);
+}
+
+
+QPushButton[Qss_Type="Button Levels"] {
+    background-image: url(:/Resource/UI/icon/Buttons/Levels/Default.png);
+}
+QPushButton[Qss_Type="Button Levels"]:hover {
+    background-image: url(:/Resource/UI/icon/Buttons/Levels/Hover.png);
+}
+QPushButton[Qss_Type="Button Levels"]:pressed {
+    background-image: url(:/Resource/UI/icon/Buttons/Levels/Hover.png);
+}
+
+
+QPushButton[Qss_Type="Button Pause"] {
+    background-image: url(:/Resource/UI/icon/Buttons/Pause/Default.png);
+}
+QPushButton[Qss_Type="Button Pause"]:hover {
+    background-image: url(:/Resource/UI/icon/Buttons/Pause/Hover.png);
+}
+QPushButton[Qss_Type="Button Pause"]:pressed {
+    background-image: url(:/Resource/UI/icon/Buttons/Pause/Hover.png);
+}
+
+
+QPushButton[Qss_Type="Button Play"] {
+    background-image: url(:/Resource/UI/icon/Buttons/Play/Default.png);
+}
+QPushButton[Qss_Type="Button Play"]:hover {
+    background-image: url(:/Resource/UI/icon/Buttons/Play/Hover.png);
+}
+QPushButton[Qss_Type="Button Play"]:pressed {
+    background-image: url(:/Resource/UI/icon/Buttons/Play/Hover.png);
+}
+
+
+QPushButton[Qss_Type="Button Repeat"] {
+    background-image: url(:/Resource/UI/icon/Buttons/Repeat/Default.png);
+}
+QPushButton[Qss_Type="Button Repeat"]:hover {
+    background-image: url(:/Resource/UI/icon/Buttons/Repeat/Hover.png);
+}
+QPushButton[Qss_Type="Button Repeat"]:pressed {
+    background-image: url(:/Resource/UI/icon/Buttons/Repeat/Hover.png);
+}
+
+
+QPushButton[Qss_Type="Button SoundOff"] {
+    background-image: url(:/Resource/UI/icon/Buttons/SoundOff/Default.png);
+}
+QPushButton[Qss_Type="Button SoundOff"]:hover {
+    background-image: url(:/Resource/UI/icon/Buttons/SoundOff/Hover.png);
+}
+QPushButton[Qss_Type="Button SoundOff"]:pressed {
+    background-image: url(:/Resource/UI/icon/Buttons/SoundOff/Hover.png);
+}
+
+
+QPushButton[Qss_Type="Button SoundOn"] {
+    background-image: url(:/Resource/UI/icon/Buttons/SoundOn/Default.png);
+}
+QPushButton[Qss_Type="Button SoundOn"]:hover {
+    background-image: url(:/Resource/UI/icon/Buttons/SoundOn/Hover.png);
+}
+QPushButton[Qss_Type="Button SoundOn"]:pressed {
+    background-image: url(:/Resource/UI/icon/Buttons/SoundOn/Hover.png);
+}
+
+
+QPushButton[Qss_Type="Button Star"] {
+    background-image: url(:/Resource/UI/icon/Buttons/Star/Default.png);
+}
+QPushButton[Qss_Type="Button Star"]:hover {
+    background-image: url(:/Resource/UI/icon/Buttons/Star/Hover.png);
+}
+QPushButton[Qss_Type="Button Star"]:pressed {
+    background-image: url(:/Resource/UI/icon/Buttons/Star/Hover.png);
+}
+
+
+QPushButton[Qss_Type^="Button Rect"] {
+    min-width: 80px;
+    max-width: 80px;
+    min-height: 43px;
+    max-height: 43px;
+    border: none;
+    border-radius: 0px;
+    color: #e1f4b1;
+}
+
+QPushButton[Qss_Type="Button Rect"] {
+    background-image: url(:/Resource/UI/icon/Buttons/Rect/Default.png);
+}
+QPushButton[Qss_Type="Button Rect"]:hover {
+    background-image: url(:/Resource/UI/icon/Buttons/Rect/Hover.png);
+}
+QPushButton[Qss_Type="Button Rect"]:pressed {
+    background-image: url(:/Resource/UI/icon/Buttons/Rect/Hover.png);
+}

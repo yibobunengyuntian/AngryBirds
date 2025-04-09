@@ -45,11 +45,11 @@ void StopDlg::paintEvent(QPaintEvent *event)
 
     // 设置圆角半径
     int radius = 10;
-
-    // 绘制顶部两个直角边
     path.addRoundedRect(this->rect(), radius, radius);
 
     // 设置背景颜色
-    painter.fillPath(path, QBrush(QColor(46, 39, 56, 150))); // 半透明黑色
+    QColor bg_color = QColor("#dcf0dc");
+    bg_color.setAlpha(190);
+    painter.fillPath(path, QBrush(bg_color)); // 半透明黑色
     painter.drawPixmap(20, 8, m_bgPixmap);
 }

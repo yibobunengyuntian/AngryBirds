@@ -78,6 +78,12 @@ void MainWin::startGame(uint level)
     QGraphicsPixmapItem *pBord = new QGraphicsPixmapItem(QPixmap(":/Resource/Game/icon/bord.jpg").transformed(transform, Qt::TransformationMode::SmoothTransformation));
     m_pScene->addItem(pBord);
 
+    transform.scale(2, 2);
+    QPixmap pixSlingshot_2 = QPixmap(":/Resource/Game/icon/slingshot_2.png").transformed(transform, Qt::TransformationMode::SmoothTransformation);
+    QGraphicsPixmapItem *pSlingshot_2 = new QGraphicsPixmapItem(pixSlingshot_2);
+    m_pScene->addItem(pSlingshot_2);
+    pSlingshot_2->setPos(300, 240);
+
     ItemRect* pGround = m_pScene->CreateRect(QPointF(m_pView->scene()->sceneRect().width()/2.0, 240 - 5), m_pView->scene()->sceneRect().width(), 10);
     pGround->setBrush(QColor(0, 0, 0, 0));
     pGround->setData(0, 0);
@@ -115,6 +121,11 @@ void MainWin::startGame(uint level)
         obstacleMapItem->setMaterial(ballFixtureDef.friction, ballFixtureDef.restitution, ballFixtureDef.density);
         obstacleMapItem->setData(0, 3);
     }
+
+    QPixmap pixSlingshot_1 = QPixmap(":/Resource/Game/icon/slingshot_1.png").transformed(transform, Qt::TransformationMode::SmoothTransformation);
+    QGraphicsPixmapItem *pSlingshot_1 = new QGraphicsPixmapItem(pixSlingshot_1);
+    m_pScene->addItem(pSlingshot_1);
+    pSlingshot_1->setPos(300 - 55, 240);
 
     m_pScene->start();
 }

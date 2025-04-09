@@ -39,5 +39,12 @@
         <file>Resource/Game/icon/pig.png</file>
         <file>Resource/Game/icon/wood.png</file>
         <file>Resource/Game/json/level.json</file>
+        <file>Resource/Game/icon/slingshot.png</file>
+        <file>Resource/Game/icon/slingshot_1.png</file>
+        <file>Resource/Game/icon/slingshot_2.png</file>
+        <file>Resource/UI/icon/Star/0-3.png</file>
+        <file>Resource/UI/icon/Star/1-3.png</file>
+        <file>Resource/UI/icon/Star/2-3.png</file>
+        <file>Resource/UI/icon/Star/3-3.png</file>
     </qresource>
 </RCC>

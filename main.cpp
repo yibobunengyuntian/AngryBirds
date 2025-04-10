@@ -21,10 +21,10 @@ int main(int argc, char *argv[])
     w->resize(600, 400);
     FrameWgt fw(w);
     // fw.setHiddenTitleBar(true);
-    // fw.setTitleBarColor(QColor("#92bd6c"));
+    // fw.setTitleBarColor(QColor::fromString("#92bd6c"));
     fw.setBackgroundColor(Qt::white);
-    fw.setTitleTextColor(QColor("#92bd6c"));
-    fw.setShadowColor(QColor("#92bd6c"));
+    fw.setTitleTextColor(QColor::fromString("#92bd6c"));
+    fw.setShadowColor(QColor::fromString("#92bd6c"));
     fw.show();
 
     return a.exec();

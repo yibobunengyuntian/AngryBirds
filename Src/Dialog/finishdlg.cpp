@@ -29,3 +29,23 @@ void FinishDlg::initialize()
     connect(m_pBtnRepeat, SIGNAL(clicked(bool)), this, SIGNAL(repeat()));
     connect(m_pBtnNext, SIGNAL(clicked(bool)), this, SIGNAL(next()));
 }
+
+void FinishDlg::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing); // 启用抗锯齿
+
+    // 创建一个路径
+    QPainterPath path;
+
+    // 设置圆角半径
+    int radius = 10;
+    path.addRoundedRect(this->rect(), radius, radius);
+
+    // 设置背景颜色
+    QColor bg_color = QColor::fromString("#dcf0dc");
+    bg_color.setAlpha(190);
+    painter.fillPath(path, QBrush(bg_color));
+}

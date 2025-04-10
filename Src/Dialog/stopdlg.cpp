@@ -48,8 +48,8 @@ void StopDlg::paintEvent(QPaintEvent *event)
     path.addRoundedRect(this->rect(), radius, radius);
 
     // 设置背景颜色
-    QColor bg_color = QColor("#dcf0dc");
+    QColor bg_color = QColor::fromString("#dcf0dc");
     bg_color.setAlpha(190);
-    painter.fillPath(path, QBrush(bg_color)); // 半透明黑色
+    painter.fillPath(path, QBrush(bg_color));
     painter.drawPixmap(20, 8, m_bgPixmap);
 }

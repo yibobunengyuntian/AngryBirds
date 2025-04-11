@@ -71,7 +71,11 @@ private:
     QList<ItemBase*> m_birds;
     QList<ItemBase*> m_pigs;
     QList<ItemBase*> m_obstacles;
+    QList<ItemBase*> m_birdQueue;
     ItemBase *m_pCurrBird = nullptr;
+
+    QGraphicsPixmapItem *m_pBoomItem = nullptr;
+    QVariantAnimation *m_pBoomAnimation = nullptr;
 };
 
 #endif // MAINWIN_H

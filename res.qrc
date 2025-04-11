@@ -46,5 +46,6 @@
         <file>Resource/UI/icon/Star/1-3.png</file>
         <file>Resource/UI/icon/Star/2-3.png</file>
         <file>Resource/UI/icon/Star/3-3.png</file>
+        <file>Resource/Game/icon/boom.png</file>
     </qresource>
 </RCC>

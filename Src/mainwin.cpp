@@ -59,6 +59,12 @@ void MainWin::initialize()
         m_pMaskWgt->move(this->mapToGlobal(QPoint(0, 0)));
     });
 
+    // 创建属性动画
+    m_pBoomAnimation = new QVariantAnimation();
+    m_pBoomAnimation->setDuration(200);
+    m_pBoomAnimation->setStartValue(0.2);
+    m_pBoomAnimation->setEndValue(1.0);
+
     m_level = Utils::readJson(":/Resource/Game/json/level.json");
 
     connect(m_pHomeWgt, SIGNAL(newGame()), this, SLOT(onNewGame()));
@@ -77,6 +83,19 @@ void MainWin::initialize()
     connect(m_pView, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(onViewMousePress(QMouseEvent*)));
     connect(m_pView, SIGNAL(mouseRelease(QMouseEvent*)), this, SLOT(onViewMouseRelease(QMouseEvent*)));
     connect(m_pView, SIGNAL(mouseMove(QMouseEvent*)), this, SLOT(onViewMouseMove(QMouseEvent*)));
+
+    connect(m_pBoomAnimation, &QVariantAnimation::finished, this, [=](){
+        if(m_pScene->items().contains(m_pBoomItem))
+        {
+            m_pBoomItem->setVisible(false);
+        }
+    });
+    connect(m_pBoomAnimation, &QVariantAnimation::valueChanged, [=](const QVariant &val) {
+        if(m_pScene->items().contains(m_pBoomItem))
+        {
+            m_pBoomItem->setScale(val.toDouble());
+        }
+    });
 }
 
 void MainWin::startGame(uint level)
@@ -114,9 +133,18 @@ void MainWin::startGame(uint level)
     m_pLineItem_2->setPen(pen);
     m_pScene->addItem(m_pLineItem_2);
 
-    ItemRect* pGround = m_pScene->CreateRect(QPointF(m_pView->scene()->sceneRect().width()/2.0, 240 - 5), m_pView->scene()->sceneRect().width(), 10);
-    pGround->setBrush(QColor(0, 0, 0, 0));
-    pGround->setData(0, 0);
+    ItemRect* pBottom = m_pScene->CreateRect(QPointF(m_pView->scene()->sceneRect().width()/2.0, 240), m_pView->scene()->sceneRect().width(), 1);
+    pBottom->setBrush(QColor(0, 0, 0, 0));
+    pBottom->setData(0, 0);
+    ItemRect* pTop = m_pScene->CreateRect(QPointF(m_pView->scene()->sceneRect().width()/2.0, m_pView->scene()->sceneRect().height() - 1), m_pView->scene()->sceneRect().width(), 1);
+    pTop->setBrush(QColor(0, 0, 0, 0));
+    pTop->setData(0, 0);
+    ItemRect* pLeft = m_pScene->CreateRect(QPointF(0, m_pView->scene()->sceneRect().height() / 2.0), 1, m_pView->scene()->sceneRect().height());
+    pLeft->setBrush(QColor(0, 0, 0, 0));
+    pLeft->setData(0, 0);
+    ItemRect* pRight = m_pScene->CreateRect(QPointF(m_pView->scene()->sceneRect().width() - 1, m_pView->scene()->sceneRect().height()/2.0), 1, m_pView->scene()->sceneRect().height());
+    pRight->setBrush(QColor(0, 0, 0, 0));
+    pRight->setData(0, 0);
 
     QVariantMap map = m_level[m_currLevel].toMap();
 
@@ -136,14 +164,33 @@ void MainWin::startGame(uint level)
     for(int i = 0; i < birds.count(); ++i)
     {
         QVariantMap birdMap = birds[i].toMap();
-        auto birdItem = m_pScene->CreateCircle(QPointF(110 * i + 100, 900), 50, bodyDef);
-        birdItem->setImage(":/Resource/Game/icon/bird_red.png");
-        birdItem->setBrush(QColor(0, 0, 0, 0));
-        birdItem->setMaterial(ballFixtureDef.friction, ballFixtureDef.restitution, 0);
-        birdItem->setData(0, 1);
+        ItemBase *birdItem = nullptr;
+        int type = birdMap.value("type").toInt();
+        if(type == 0)
+        {
+            birdItem = m_pScene->CreateCircle(QPointF(110 * i + 100, 900), 50, bodyDef);
+            birdItem->setImage(":/Resource/Game/icon/bird_red.png");
+        }
+        else if(type == 1)
+        {
+            QList<QPointF> points;
+            points.append(QPoint(0, 0));
+            points.append(QPoint(-80/qSqrt(3), -80));
+            points.append(QPoint(80/qSqrt(3), -80));
+            birdItem = m_pScene->CreatePolygon(points, bodyDef);
+            birdItem->setPos(QPoint(110 * i + 100, 900));
+            birdItem->setImage(":/Resource/Game/icon/bird_yellow.png");
+        }
 
-        m_birds.append(birdItem);
+        if(birdItem != nullptr)
+        {
+            birdItem->setBrush(QColor(0, 0, 0, 0));
+            birdItem->setMaterial(ballFixtureDef.friction, ballFixtureDef.restitution, 0);
+            birdItem->setData(0, 1);
+            m_birds.append(birdItem);
+        }
     }
+    m_birdQueue = m_birds;
 
 
     for(const QVariant &pig: pigs)
@@ -161,13 +208,32 @@ void MainWin::startGame(uint level)
     for(const QVariant &obstacle: obstacles)
     {
         QVariantMap obstacleMap = obstacle.toMap();
-        auto obstacleItem = m_pScene->CreateRect(QPointF(obstacleMap.value("x").toDouble(), obstacleMap.value("y").toDouble()), 100, 100, bodyDef);
-        obstacleItem->setImage(":/Resource/Game/icon/wood.png");
-        obstacleItem->setBrush(QColor(0, 0, 0, 0));
-        obstacleItem->setMaterial(ballFixtureDef.friction, ballFixtureDef.restitution, ballFixtureDef.density);
-        obstacleItem->setData(0, 3);
+        ItemBase *obstacleItem = nullptr;
+        int type = obstacleMap.value("type").toInt();
+        if(type == 0)
+        {
+            obstacleItem = m_pScene->CreateRect(QPointF(obstacleMap.value("x").toDouble(), obstacleMap.value("y").toDouble()), 100, 100, bodyDef);
+            obstacleItem->setImage(":/Resource/Game/icon/wood.png");
+            obstacleItem->setBrush(QColor(0, 0, 0, 0));
+        }
+        else if(type == 1)
+        {
+            obstacleItem = m_pScene->CreateRect(QPointF(obstacleMap.value("x").toDouble(), obstacleMap.value("y").toDouble()), 150, 20, bodyDef);
+            obstacleItem->setBrush(QColor::fromString("#ffce45"));
+        }
+        else if(type == 2)
+        {
+            obstacleItem = m_pScene->CreateRect(QPointF(obstacleMap.value("x").toDouble(), obstacleMap.value("y").toDouble()), 20, 150, bodyDef);
+            obstacleItem->setBrush(QColor::fromString("#ffce45"));
+        }
 
-        m_obstacles.append(obstacleItem);
+
+        if(obstacleItem != nullptr)
+        {
+            obstacleItem->setMaterial(ballFixtureDef.friction, ballFixtureDef.restitution, ballFixtureDef.density);
+            obstacleItem->setData(0, 3);
+            m_obstacles.append(obstacleItem);
+        }
     }
 
     m_pLineItem_1 = new QGraphicsLineItem(QLineF(m_p1, m_launchPos));
@@ -184,6 +250,12 @@ void MainWin::startGame(uint level)
     m_pScene->addItem(pSlingshot_1);
     pSlingshot_1->setPos(300 - 55, 240);
 
+    QPixmap pix(":/Resource/Game/icon/boom.png");
+    m_pBoomItem = new QGraphicsPixmapItem(pix);
+    m_pBoomItem->setOffset(-pix.width()/2.0, -pix.height()/2.0);
+    m_pBoomItem->setScale(0.5);
+    m_pScene->addItem(m_pBoomItem);
+    m_pBoomItem->setVisible(false);
 
     m_pScene->start();
 }
@@ -209,7 +281,7 @@ void MainWin::onNewGame()
     m_pView->fitInView(m_pScene->sceneRect(), Qt::KeepAspectRatio);
     m_pBtnStop->move(m_pView->width() - 50, 10);
 
-    startGame(1);
+    startGame(0);
 }
 
 void MainWin::onSelectLevel()
@@ -224,6 +296,7 @@ void MainWin::onExit()
 
 void MainWin::onHome()
 {
+    m_pScene->stop();
     m_pStopDlg->hide();
     m_pFinishDlg->hide();
     m_pMaskWgt->hide();
@@ -237,6 +310,10 @@ void MainWin::onResume()
     m_pMaskWgt->hide();
 
     m_pScene->start();
+    if(m_pBoomAnimation->state() == QAbstractAnimation::Paused)
+    {
+        m_pBoomAnimation->resume();
+    }
 }
 
 void MainWin::onRepeat()
@@ -251,6 +328,10 @@ void MainWin::onRepeat()
 void MainWin::onStop()
 {
     m_pScene->stop();
+    if(m_pBoomAnimation->state() == QAbstractAnimation::Running)
+    {
+        m_pBoomAnimation->pause();
+    }
     m_pMaskWgt->move(this->mapToGlobal(QPoint(0, 0)));
     m_pMaskWgt->show();
     m_pStopDlg->move((m_pMaskWgt->width() - m_pStopDlg->width())/2.0, (m_pMaskWgt->height() - m_pStopDlg->height())/2.0);
@@ -273,6 +354,8 @@ void MainWin::onNext()
 
 void MainWin::onBeginContact(ItemBase *A, ItemBase *B, QPointF pos)
 {
+    Q_UNUSED(pos)
+
     ItemBase *pPig = nullptr;
     if(A->data(0).toInt() == 2 && B->data(0).toInt() == 1)
     {
@@ -286,10 +369,15 @@ void MainWin::onBeginContact(ItemBase *A, ItemBase *B, QPointF pos)
     {
         m_pScene->DestroyItem(pPig);
         m_pigs.removeOne(pPig);
+        m_pBoomItem->setVisible(true);
+        m_pBoomItem->setPos(pPig->pos());
+        m_pBoomAnimation->stop();
+        m_pBoomAnimation->start();
         if(m_pigs.isEmpty())
         {
             m_pMaskWgt->move(this->mapToGlobal(QPoint(0, 0)));
             m_pMaskWgt->show();
+            m_pFinishDlg->setStarNumber(3);
             m_pFinishDlg->move((m_pMaskWgt->width() - m_pFinishDlg->width())/2.0, (m_pMaskWgt->height() - m_pFinishDlg->height())/2.0);
             m_pFinishDlg->show();
         }
@@ -302,12 +390,18 @@ void MainWin::onTimerEvent()
     auto pigs = m_pigs;
     auto obstacles = m_obstacles;
 
+    bool isStatic = true;
+
     for(auto item: birds)
     {
         if(!m_pScene->sceneRect().contains(item->pos()))
         {
             m_pScene->DestroyItem(item);
             m_birds.removeOne(item);
+        }
+        if(QVector2D(item->linearVelocity()).length() > 1)
+        {
+            isStatic = false;
         }
     }
 
@@ -318,6 +412,10 @@ void MainWin::onTimerEvent()
             m_pScene->DestroyItem(item);
             m_pigs.removeOne(item);
         }
+        if(QVector2D(item->linearVelocity()).length() > 1)
+        {
+            isStatic = false;
+        }
     }
 
     for(auto item: obstacles)
@@ -327,6 +425,19 @@ void MainWin::onTimerEvent()
             m_pScene->DestroyItem(item);
             m_obstacles.removeOne(item);
         }
+        if(QVector2D(item->linearVelocity()).length() > 1)
+        {
+            isStatic = false;
+        }
+    }
+
+    if(m_pCurrBird == nullptr && m_birdQueue.isEmpty() && isStatic && m_pFinishDlg->isHidden())
+    {
+        m_pMaskWgt->move(this->mapToGlobal(QPoint(0, 0)));
+        m_pMaskWgt->show();
+        m_pFinishDlg->setStarNumber(0);
+        m_pFinishDlg->move((m_pMaskWgt->width() - m_pFinishDlg->width())/2.0, (m_pMaskWgt->height() - m_pFinishDlg->height())/2.0);
+        m_pFinishDlg->show();
     }
 }
 
@@ -348,25 +459,25 @@ void MainWin::onViewMousePress(QMouseEvent *event)
         return;
     }
 
-    for(ItemBase *bird: m_birds)
+    for(ItemBase *bird: m_birdQueue)
     {
         if(bird->shape().contains(pos - bird->pos()))
         {
             if(m_pCurrBird != nullptr)
             {
-                m_birds.push_back(m_pCurrBird);
+                m_birdQueue.push_back(m_pCurrBird);
             }
-            m_birds.removeOne(bird);
+            m_birdQueue.removeOne(bird);
             m_pCurrBird = bird;
 
             b2FixtureDef ballFixtureDef;
             ballFixtureDef.restitution = 0.55f;
             ballFixtureDef.density = 1.0f;
             ballFixtureDef.friction = 0.1f;
-            for(int i = 0; i < m_birds.count(); ++i)
+            for(int i = 0; i < m_birdQueue.count(); ++i)
             {
-                m_birds[i]->setPos(QPointF(110 * i + 100, 900));
-                m_birds[i]->setMaterial(ballFixtureDef.friction, ballFixtureDef.restitution, 0);
+                m_birdQueue[i]->setPos(QPointF(110 * i + 100, 900));
+                m_birdQueue[i]->setMaterial(ballFixtureDef.friction, ballFixtureDef.restitution, 0);
             }
 
             m_pCurrBird->setPos((m_p1 + m_p2) / 2);
@@ -377,6 +488,8 @@ void MainWin::onViewMousePress(QMouseEvent *event)
 
 void MainWin::onViewMouseRelease(QMouseEvent *event)
 {
+    Q_UNUSED(event)
+
     if(m_isPressEllipseItem)
     {
         QLineF line((m_p1 + m_p2) / 2, m_launchPos);
@@ -390,7 +503,7 @@ void MainWin::onViewMouseRelease(QMouseEvent *event)
             connect(pBoomAnimation, &QVariantAnimation::finished, this, [=](){
                 pBoomAnimation->deleteLater();
             });
-            connect(pBoomAnimation, &QVariantAnimation::valueChanged, [=](const QVariant &val) {
+            connect(pBoomAnimation, &QVariantAnimation::valueChanged, this, [=](const QVariant &val) {
                 m_launchPos = val.toPointF();
                 m_pLineItem_1->setLine(QLineF(m_p1, m_launchPos));
                 m_pLineItem_2->setLine(QLineF(m_p2, m_launchPos));

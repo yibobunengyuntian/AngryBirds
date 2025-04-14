@@ -65,7 +65,12 @@ void MainWin::initialize()
     m_pBoomAnimation->setStartValue(0.2);
     m_pBoomAnimation->setEndValue(1.0);
 
-    m_level = Utils::readJson(":/Resource/Game/json/level.json");
+    QString levelPath = Utils::readConfig(qApp->applicationDirPath() + "/ini.cfg", "levelPath").toString();
+    if(levelPath.isEmpty() || Utils::fileExsit(levelPath))
+    {
+        levelPath = ":/Resource/Game/json/level.json";
+    }
+    m_level = Utils::readJson(levelPath);
 
     connect(m_pHomeWgt, SIGNAL(newGame()), this, SLOT(onNewGame()));
     connect(m_pHomeWgt, SIGNAL(selectLevel()), this, SLOT(onSelectLevel()));

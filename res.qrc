@@ -33,11 +33,7 @@
         <file>Resource/Game/icon/bird_red.png</file>
         <file>Resource/Game/icon/bird_yellow.png</file>
         <file>Resource/Game/icon/bord.jpg</file>
-        <file>Resource/Game/icon/obstacles_1.png</file>
-        <file>Resource/Game/icon/obstacles_2.png</file>
-        <file>Resource/Game/icon/obstacles_3.png</file>
         <file>Resource/Game/icon/pig.png</file>
-        <file>Resource/Game/icon/wood.png</file>
         <file>Resource/Game/json/level.json</file>
         <file>Resource/Game/icon/slingshot.png</file>
         <file>Resource/Game/icon/slingshot_1.png</file>
@@ -47,5 +43,7 @@
         <file>Resource/UI/icon/Star/2-3.png</file>
         <file>Resource/UI/icon/Star/3-3.png</file>
         <file>Resource/Game/icon/boom.png</file>
+        <file>Resource/Game/icon/plank_1.png</file>
+        <file>Resource/Game/icon/plank_2.png</file>
     </qresource>
 </RCC>

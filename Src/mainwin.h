@@ -13,6 +13,7 @@
 #include "finishdlg.h"
 #include "homewgt.h"
 #include "maskwgt.h"
+#include "levelwgt.h"
 
 
 class MainWin : public QWidget, public Ui_MainWin
@@ -32,6 +33,7 @@ protected:
 protected slots:
     void onNewGame();
     void onSelectLevel();
+    void onStartLevel(uint level);
     void onExit();
     void onHome();
     void onResume();
@@ -54,9 +56,10 @@ private:
     StopDlg *m_pStopDlg = nullptr;
     FinishDlg *m_pFinishDlg = nullptr;
     HomeWgt *m_pHomeWgt = nullptr;
+    LevelWgt *m_pLevelWgt = nullptr;
 
-    QPointF m_p1 = QPointF(300 - 55 + 32, 240 + 296);
-    QPointF m_p2 = QPointF(300 + 54, 240 + 304);
+    QPointF m_p1 = QPointF(300 - 30, 240 + 347);
+    QPointF m_p2 = QPointF(300 + 58, 240 + 344);
     QPointF m_launchPos;
     QGraphicsEllipseItem * m_pEllipseItem = nullptr;
     QGraphicsLineItem *m_pLineItem_1 = nullptr;

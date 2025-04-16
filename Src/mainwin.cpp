@@ -16,9 +16,6 @@ MainWin::~MainWin()
 
 void MainWin::initialize()
 {
-    // m_pView->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-    // m_pView->installEventFilter(this);
-    setMouseTracking(true); // 如果需要持续跟踪
     this->setWindowTitle("愤怒的小鸟");
     QIcon icon(":/Resource/UI/icon/title.ico");
     QApplication::setWindowIcon(icon);
@@ -41,6 +38,9 @@ void MainWin::initialize()
 
     m_pStackedWgt->addWidget(m_pHomeWgt);
     m_pStackedWgt->addWidget(m_pView);
+
+    m_pLevelWgt = new LevelWgt;
+    m_pStackedWgt->addWidget(m_pLevelWgt);
 
     m_pStopDlg = new StopDlg(m_pMaskWgt);
     m_pStopDlg->hide();
@@ -71,10 +71,13 @@ void MainWin::initialize()
         levelPath = ":/Resource/Game/json/level.json";
     }
     m_level = Utils::readJson(levelPath);
+    m_pLevelWgt->setLevel(m_level);
 
     connect(m_pHomeWgt, SIGNAL(newGame()), this, SLOT(onNewGame()));
     connect(m_pHomeWgt, SIGNAL(selectLevel()), this, SLOT(onSelectLevel()));
     connect(m_pHomeWgt, SIGNAL(exit()), this, SLOT(onExit()));
+    connect(m_pLevelWgt, SIGNAL(selectedLevel(uint)), this, SLOT(onStartLevel(uint)));
+    connect(m_pLevelWgt, SIGNAL(home()), this, SLOT(onHome()));
     connect(m_pBtnStop, SIGNAL(clicked(bool)), this, SLOT(onStop()));
     connect(m_pStopDlg, SIGNAL(home()), this, SLOT(onHome()));
     connect(m_pStopDlg, SIGNAL(resume()), this, SLOT(onResume()));
@@ -119,11 +122,9 @@ void MainWin::startGame(uint level)
     QGraphicsPixmapItem *pBord = new QGraphicsPixmapItem(QPixmap(":/Resource/Game/icon/bord.jpg").transformed(transform, Qt::TransformationMode::SmoothTransformation));
     m_pScene->addItem(pBord);
 
-
     m_launchPos = (m_p1 + m_p2) / 2;
 
-
-    transform.scale(2, 2);
+    transform.scale(0.5, 0.5);
     QPixmap pixSlingshot_2 = QPixmap(":/Resource/Game/icon/slingshot_2.png").transformed(transform, Qt::TransformationMode::SmoothTransformation);
     QGraphicsPixmapItem *pSlingshot_2 = new QGraphicsPixmapItem(pixSlingshot_2);
     m_pScene->addItem(pSlingshot_2);
@@ -215,26 +216,23 @@ void MainWin::startGame(uint level)
         QVariantMap obstacleMap = obstacle.toMap();
         ItemBase *obstacleItem = nullptr;
         int type = obstacleMap.value("type").toInt();
+
         if(type == 0)
         {
-            obstacleItem = m_pScene->CreateRect(QPointF(obstacleMap.value("x").toDouble(), obstacleMap.value("y").toDouble()), 100, 100, bodyDef);
-            obstacleItem->setImage(":/Resource/Game/icon/wood.png");
-            obstacleItem->setBrush(QColor(0, 0, 0, 0));
+            obstacleItem = m_pScene->CreateRect(QPointF(obstacleMap.value("x").toDouble(), obstacleMap.value("y").toDouble()), 150, 20, bodyDef);
+            obstacleItem->setImage(":/Resource/Game/icon/plank_1.png");
         }
         else if(type == 1)
         {
-            obstacleItem = m_pScene->CreateRect(QPointF(obstacleMap.value("x").toDouble(), obstacleMap.value("y").toDouble()), 150, 20, bodyDef);
-            obstacleItem->setBrush(QColor::fromString("#ffce45"));
-        }
-        else if(type == 2)
-        {
-            obstacleItem = m_pScene->CreateRect(QPointF(obstacleMap.value("x").toDouble(), obstacleMap.value("y").toDouble()), 20, 150, bodyDef);
-            obstacleItem->setBrush(QColor::fromString("#ffce45"));
+            obstacleItem = m_pScene->CreateRect(QPointF(obstacleMap.value("x").toDouble(), obstacleMap.value("y").toDouble()), 20, 120, bodyDef);
+            obstacleItem->setImage(":/Resource/Game/icon/plank_2.png");
+            // QPixmap(":/Resource/Game/icon/plank_2.png").scaled(100, 600, Qt::IgnoreAspectRatio, Qt::SmoothTransformation).save("D:/test/AngryBirds/Resource/Game/plank_2.png");
         }
 
 
         if(obstacleItem != nullptr)
         {
+            obstacleItem->setBrush(QColor(0, 0, 0, 0));
             obstacleItem->setMaterial(ballFixtureDef.friction, ballFixtureDef.restitution, ballFixtureDef.density);
             obstacleItem->setData(0, 3);
             m_obstacles.append(obstacleItem);
@@ -253,7 +251,7 @@ void MainWin::startGame(uint level)
     QPixmap pixSlingshot_1 = QPixmap(":/Resource/Game/icon/slingshot_1.png").transformed(transform, Qt::TransformationMode::SmoothTransformation);
     QGraphicsPixmapItem *pSlingshot_1 = new QGraphicsPixmapItem(pixSlingshot_1);
     m_pScene->addItem(pSlingshot_1);
-    pSlingshot_1->setPos(300 - 55, 240);
+    pSlingshot_1->setPos(pSlingshot_2->pos().x() - pSlingshot_1->boundingRect().width() + 1, pSlingshot_2->pos().y());
 
     QPixmap pix(":/Resource/Game/icon/boom.png");
     m_pBoomItem = new QGraphicsPixmapItem(pix);
@@ -291,7 +289,16 @@ void MainWin::onNewGame()
 
 void MainWin::onSelectLevel()
 {
+    m_pStackedWgt->setCurrentWidget(m_pLevelWgt);
+}
 
+void MainWin::onStartLevel(uint level)
+{
+    m_pStackedWgt->setCurrentWidget(m_pView);
+    m_pView->fitInView(m_pScene->sceneRect(), Qt::KeepAspectRatio);
+    m_pBtnStop->move(m_pView->width() - 50, 10);
+
+    startGame(level);
 }
 
 void MainWin::onExit()
@@ -512,7 +519,7 @@ void MainWin::onViewMouseRelease(QMouseEvent *event)
                 m_launchPos = val.toPointF();
                 m_pLineItem_1->setLine(QLineF(m_p1, m_launchPos));
                 m_pLineItem_2->setLine(QLineF(m_p2, m_launchPos));
-                m_pEllipseItem->setRect(QRectF(m_launchPos - QPointF(10, 10), m_launchPos + QPointF(10, 10)));
+                m_pEllipseItem->setRect(QRectF(m_launchPos - QPointF(15, 15), m_launchPos + QPointF(15, 15)));
             });
 
             pBoomAnimation->start();

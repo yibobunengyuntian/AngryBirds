@@ -12,4 +12,5 @@ SOURCES += \
 
 include($$PWD/Dialog/Dialog.pri)
 include($$PWD/HomeWgt/HomeWgt.pri)
+include($$PWD/LevelWgt/LevelWgt.pri)
 include($$PWD/MaskWgt/MaskWgt.pri)

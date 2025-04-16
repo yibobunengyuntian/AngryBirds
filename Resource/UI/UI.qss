@@ -167,3 +167,10 @@ QPushButton[Qss_Type="Button Rect"]:hover {
 QPushButton[Qss_Type="Button Rect"]:pressed {
     background-image: url(:/Resource/UI/icon/Buttons/Rect/Hover.png);
 }
+
+
+QScrollArea
+{
+    border: none;
+    background-color: transparent;
+}

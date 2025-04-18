@@ -20,28 +20,84 @@ class MainWin : public QWidget, public Ui_MainWin
 {
     Q_OBJECT
 
+    enum ItemType
+    {
+        Box = 0,    // 地面与四周墙壁
+        Bird,       // 鸟
+        Pig,        // 猪
+        Obstacle    // 障碍物
+    };
+    enum BirdType
+    {
+        RedBird = 0,// 红色鸟
+        YellowBird, // 黄色鸟
+    };
+    enum PigType
+    {
+        Pig1 = 0,   // 猪1
+    };
+    enum ObstacleType
+    {
+        Plank_H = 0,// 木板(水平)
+        Plank_V,    // 木板(竖直)
+    };
+
 public:
     explicit MainWin(QWidget *parent = nullptr);
     ~MainWin();
 
 protected:
+    // 初始化
     void initialize();
+
+    /**
+     * @brief startGame 开始游戏
+     * @param level     关卡
+     */
     void startGame(uint level = 0);
 
     void resizeEvent(QResizeEvent *event) override;
 
 protected slots:
+    // 新游戏
     void onNewGame();
+
+    // 选择关卡
     void onSelectLevel();
+
+    /**
+     * @brief onStartLevel  开始关卡
+     * @param level         关卡
+     */
     void onStartLevel(uint level);
+
+    // 退出游戏
     void onExit();
+
+    // 主页
     void onHome();
+
+    // 继续游戏
     void onResume();
+
+    // 重新开始
     void onRepeat();
+
+    // 暂停
     void onStop();
+
+    // 下一关
     void onNext();
 
+    /**
+     * @brief onBeginContact    // 发生碰撞触发该函数
+     * @param A                 // 物体A
+     * @param B                 // 物体B
+     * @param pos               // 碰撞点
+     */
     void onBeginContact(ItemBase *A, ItemBase *B, QPointF pos);
+
+    // 游戏每一帧触发该函数
     void onTimerEvent();
 
     void onViewMousePress(QMouseEvent *event);

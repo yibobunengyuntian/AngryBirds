@@ -1,4 +1,5 @@
 #include "finishdlg.h"
+#include "defines.h"
 
 FinishDlg::FinishDlg(QWidget *parent)
     : QWidget(parent)
@@ -61,9 +62,9 @@ void FinishDlg::initialize()
 {
     this->setWindowFlags(Qt::FramelessWindowHint | windowFlags()); // 隐藏默认边框
 
-    m_pBtnHome->setProperty("Qss_Type", "Button Home");
-    m_pBtnRepeat->setProperty("Qss_Type", "Button Repeat");
-    m_pBtnNext->setProperty("Qss_Type", "Button ArrowRight-Thin");
+    m_pBtnHome->setProperty(DEF_QSS_TYPE, "Button Home");
+    m_pBtnRepeat->setProperty(DEF_QSS_TYPE, "Button Repeat");
+    m_pBtnNext->setProperty(DEF_QSS_TYPE, "Button ArrowRight-Thin");
 
     m_pBtnHome->setToolTip("返回大厅");
     m_pBtnRepeat->setToolTip("重新开始");

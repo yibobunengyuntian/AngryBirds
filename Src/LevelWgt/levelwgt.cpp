@@ -1,4 +1,5 @@
 #include "levelwgt.h"
+#include "defines.h"
 
 LevelWgt::LevelWgt(QWidget *parent)
     :QWidget(parent)
@@ -8,7 +9,7 @@ LevelWgt::LevelWgt(QWidget *parent)
     QVBoxLayout *pLayout = new QVBoxLayout;
 
     m_pBtnHome = new QPushButton(this);
-    m_pBtnHome->setProperty("Qss_Type", "Button Home");
+    m_pBtnHome->setProperty(DEF_QSS_TYPE, "Button Home");
     m_pBtnHome->setToolTip("返回大厅");
 
     pLayout->addWidget(m_pBtnHome);
@@ -37,7 +38,7 @@ void LevelWgt::setLevel(const QVariantList &level)
     for(int i = 0; i < level.count(); ++i)
     {
         QPushButton *btn = new QPushButton(QString("第%1关").arg(i + 1), m_pCenterWgt);
-        btn->setProperty("Qss_Type", "Button Rect");
+        btn->setProperty(DEF_QSS_TYPE, "Button Rect");
         m_buttons.append(btn);
         connect(btn, &QPushButton::clicked, this, [=](){
             emit selectedLevel(i);

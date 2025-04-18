@@ -4,6 +4,7 @@ FORMS += \
     $$PWD/mainwin.ui
 
 HEADERS += \
+    $$PWD/defines.h \
     $$PWD/mainwin.h
 
 SOURCES += \

@@ -1,4 +1,5 @@
 #include "homewgt.h"
+#include "defines.h"
 
 HomeWgt::HomeWgt(QWidget *parent)
     : QWidget(parent)
@@ -17,9 +18,9 @@ void HomeWgt::initialize()
 {
     // 加载背景图片
     m_bgPixmap.load(":/Resource/UI/icon/background/bg_home.jpg");
-    m_pBtnNew->setProperty("Qss_Type", "Button Rect");
-    m_pBtnSelect->setProperty("Qss_Type", "Button Rect");
-    m_pBtnExit->setProperty("Qss_Type", "Button Rect");
+    m_pBtnNew->setProperty(DEF_QSS_TYPE, "Button Rect");
+    m_pBtnSelect->setProperty(DEF_QSS_TYPE, "Button Rect");
+    m_pBtnExit->setProperty(DEF_QSS_TYPE, "Button Rect");
 
     connect(m_pBtnNew, SIGNAL(clicked(bool)), this, SIGNAL(newGame()));
     connect(m_pBtnSelect, SIGNAL(clicked(bool)), this, SIGNAL(selectLevel()));

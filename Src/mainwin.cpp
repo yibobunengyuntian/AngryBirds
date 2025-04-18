@@ -1,5 +1,6 @@
 #include "mainwin.h"
 #include "utils.h"
+#include "defines.h"
 
 MainWin::MainWin(QWidget *parent)
     : QWidget(parent)
@@ -31,7 +32,7 @@ void MainWin::initialize()
     m_pView->setScene(m_pScene);
 
     m_pBtnStop = new QPushButton(m_pView);
-    m_pBtnStop->setProperty("Qss_Type", "Button Pause");
+    m_pBtnStop->setProperty(DEF_QSS_TYPE, "Button Pause");
     m_pBtnStop->setToolTip("暂停");
 
     m_pHomeWgt = new HomeWgt;
@@ -98,7 +99,7 @@ void MainWin::initialize()
             m_pBoomItem->setVisible(false);
         }
     });
-    connect(m_pBoomAnimation, &QVariantAnimation::valueChanged, [=](const QVariant &val) {
+    connect(m_pBoomAnimation, &QVariantAnimation::valueChanged, this, [=](const QVariant &val) {
         if(m_pScene->items().contains(m_pBoomItem))
         {
             m_pBoomItem->setScale(val.toDouble());
@@ -141,22 +142,22 @@ void MainWin::startGame(uint level)
 
     ItemRect* pBottom = m_pScene->CreateRect(QPointF(m_pView->scene()->sceneRect().width()/2.0, 240), m_pView->scene()->sceneRect().width(), 1);
     pBottom->setBrush(QColor(0, 0, 0, 0));
-    pBottom->setData(0, 0);
+    pBottom->setData(0, ItemType::Box);
     ItemRect* pTop = m_pScene->CreateRect(QPointF(m_pView->scene()->sceneRect().width()/2.0, m_pView->scene()->sceneRect().height() - 1), m_pView->scene()->sceneRect().width(), 1);
     pTop->setBrush(QColor(0, 0, 0, 0));
-    pTop->setData(0, 0);
+    pTop->setData(0, ItemType::Box);
     ItemRect* pLeft = m_pScene->CreateRect(QPointF(0, m_pView->scene()->sceneRect().height() / 2.0), 1, m_pView->scene()->sceneRect().height());
     pLeft->setBrush(QColor(0, 0, 0, 0));
-    pLeft->setData(0, 0);
+    pLeft->setData(0, ItemType::Box);
     ItemRect* pRight = m_pScene->CreateRect(QPointF(m_pView->scene()->sceneRect().width() - 1, m_pView->scene()->sceneRect().height()/2.0), 1, m_pView->scene()->sceneRect().height());
     pRight->setBrush(QColor(0, 0, 0, 0));
-    pRight->setData(0, 0);
+    pRight->setData(0, ItemType::Box);
 
-    QVariantMap map = m_level[m_currLevel].toMap();
+    QVariantMap levelMap = m_level[m_currLevel].toMap();
 
-    QVariantList birds = map.value("birds").toList();
-    QVariantList pigs = map.value("pigs").toList();
-    QVariantList obstacles = map.value("obstacles").toList();
+    QVariantList birds = levelMap.value(DEF_BIRDS).toList();
+    QVariantList pigs = levelMap.value(DEF_PIGS).toList();
+    QVariantList obstacles = levelMap.value(DEF_OBSTACLES).toList();
 
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
@@ -192,7 +193,8 @@ void MainWin::startGame(uint level)
         {
             birdItem->setBrush(QColor(0, 0, 0, 0));
             birdItem->setMaterial(ballFixtureDef.friction, ballFixtureDef.restitution, 0);
-            birdItem->setData(0, 1);
+            birdItem->setData(0, ItemType::Bird);
+            birdItem->setData(1, type);
             m_birds.append(birdItem);
         }
     }
@@ -202,13 +204,22 @@ void MainWin::startGame(uint level)
     for(const QVariant &pig: pigs)
     {
         QVariantMap pigMap = pig.toMap();
-        auto pigItem = m_pScene->CreateCircle(QPointF(pigMap.value("x").toDouble(), pigMap.value("y").toDouble()), 50, bodyDef);
-        pigItem->setImage(":/Resource/Game/icon/pig.png");
-        pigItem->setBrush(QColor(0, 0, 0, 0));
-        pigItem->setMaterial(ballFixtureDef.friction, ballFixtureDef.restitution, ballFixtureDef.density);
-        pigItem->setData(0, 2);
+        ItemBase *pigItem = nullptr;
+        int type = pigMap.value("type").toInt();
+        if(type == PigType::Pig1)
+        {
+            pigItem = m_pScene->CreateCircle(QPointF(pigMap.value("x").toDouble(), pigMap.value("y").toDouble()), 50, bodyDef);
+            pigItem->setImage(":/Resource/Game/icon/pig.png");
+        }
 
-        m_pigs.append(pigItem);
+        if(pigItem != nullptr)
+        {
+            pigItem->setBrush(QColor(0, 0, 0, 0));
+            pigItem->setMaterial(ballFixtureDef.friction, ballFixtureDef.restitution, ballFixtureDef.density);
+            pigItem->setData(0, ItemType::Pig);
+            pigItem->setData(1, type);
+            m_pigs.append(pigItem);
+        }
     }
 
     for(const QVariant &obstacle: obstacles)
@@ -234,7 +245,8 @@ void MainWin::startGame(uint level)
         {
             obstacleItem->setBrush(QColor(0, 0, 0, 0));
             obstacleItem->setMaterial(ballFixtureDef.friction, ballFixtureDef.restitution, ballFixtureDef.density);
-            obstacleItem->setData(0, 3);
+            obstacleItem->setData(0, ItemType::Obstacle);
+            obstacleItem->setData(1, type);
             m_obstacles.append(obstacleItem);
         }
     }
@@ -369,11 +381,11 @@ void MainWin::onBeginContact(ItemBase *A, ItemBase *B, QPointF pos)
     Q_UNUSED(pos)
 
     ItemBase *pPig = nullptr;
-    if(A->data(0).toInt() == 2 && B->data(0).toInt() == 1)
+    if(A->data(0).toInt() == ItemType::Pig && B->data(0).toInt() == ItemType::Bird)
     {
         pPig = A;
     }
-    if(A->data(0).toInt() == 1 && B->data(0).toInt() == 2)
+    if(A->data(0).toInt() == ItemType::Bird && B->data(0).toInt() == ItemType::Pig)
     {
         pPig = B;
     }

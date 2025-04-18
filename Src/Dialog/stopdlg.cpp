@@ -1,4 +1,5 @@
 #include "stopdlg.h"
+#include "defines.h"
 
 StopDlg::StopDlg(QWidget *parent)
     : QWidget(parent)
@@ -17,9 +18,9 @@ void StopDlg::initialize()
 {
     this->setWindowFlags(Qt::FramelessWindowHint | windowFlags()); // 隐藏默认边框
 
-    m_pBtnHome->setProperty("Qss_Type", "Button Home");
-    m_pBtnResume->setProperty("Qss_Type", "Button Play");
-    m_pBtnRepeat->setProperty("Qss_Type", "Button Repeat");
+    m_pBtnHome->setProperty(DEF_QSS_TYPE, "Button Home");
+    m_pBtnResume->setProperty(DEF_QSS_TYPE, "Button Play");
+    m_pBtnRepeat->setProperty(DEF_QSS_TYPE, "Button Repeat");
 
     m_bgPixmap.load(":/Resource/UI/icon/background/bg_stop.png");
     m_bgPixmap = m_bgPixmap.scaledToHeight(150, Qt::TransformationMode::SmoothTransformation);

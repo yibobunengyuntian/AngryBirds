@@ -172,5 +172,5 @@ QPushButton[Qss_Type="Button Rect"]:pressed {
 QScrollArea
 {
     border: none;
-    background-color: transparent;
+    background-color: #f0f0f0;
 }

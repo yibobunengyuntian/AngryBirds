@@ -24,7 +24,7 @@
         <file>Resource/UI/icon/Buttons/SoundOn/Hover.png</file>
         <file>Resource/UI/icon/Buttons/Star/Default.png</file>
         <file>Resource/UI/icon/Buttons/Star/Hover.png</file>
-        <file>Resource/UI/UI.qss</file>
+        <file>Resource/UI/style.qss</file>
         <file>Resource/UI/icon/background/bg_stop.png</file>
         <file>Resource/UI/icon/background/bg_home.jpg</file>
         <file>Resource/UI/icon/Buttons/Rect/Default.png</file>

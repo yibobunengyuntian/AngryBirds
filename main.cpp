@@ -4,17 +4,14 @@
 #include <QFile>
 
 #include "framewgt.h"
+#include "utils.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    QFile styleFile(":Resource/UI/UI.qss");
-    if (styleFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QString styleSheet = QLatin1String(styleFile.readAll());
-        a.setStyleSheet(styleSheet);
-        styleFile.close();
-    }
+    Utils::loadStyle(":Resource/UI/style.qss");
+
     QFont font("华文琥珀");
     a.setFont(font);
 
